@@ -4,6 +4,7 @@ import core.Game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class View extends JFrame {
     private static final int WIDTH = 1000;
@@ -22,8 +23,8 @@ public class View extends JFrame {
     public View(int numberOfTracks) {
         this.numberOfTracks = numberOfTracks;
         createContent();
-        createGame();
         createNamePanel();
+        createGame();
         addContentAndPack();
     }
 
@@ -46,7 +47,7 @@ public class View extends JFrame {
     }
 
     public void createGame() {
-        game = new Game(numberOfTracks, raceLeader);
+        game = new Game(numberOfTracks, raceLeader, panel);
         scrollPaneGame = new JScrollPane(game);
     }
 
@@ -56,7 +57,8 @@ public class View extends JFrame {
         for (int i = 1; i < numberOfTracks + 1; i++) {
             textField = new JTextField();
             textField.setText("Set name " + i);
-            textField.setPreferredSize(new Dimension(100, game.getTrackHeight()));
+            //textField.setPreferredSize(new Dimension(100, game.getTrackHeight()));
+            textField.setPreferredSize(new Dimension(100, 50));
             panel.add(textField);
         }
         scrollPaneText = new JScrollPane(panel);

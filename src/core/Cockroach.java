@@ -1,7 +1,11 @@
 package core;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,6 +13,7 @@ import java.util.logging.Logger;
 public class Cockroach extends JPanel implements Runnable {
     private Thread cockroachThread;
     private String name;
+    private int number;
     private Random random;
     private Game game;
     private Image cockroachImg;
@@ -16,10 +21,11 @@ public class Cockroach extends JPanel implements Runnable {
     private int finishX;
     private boolean finished = false;
 
-    public Cockroach(String name, int x, int y, int finish, Game game) {
+    public Cockroach(String name, int number, int x, int y, int finish, Game game) {
         random = new Random();
         this.cockroachImg = readImage();
         this.name = name;
+        this.number = number;
         this.coordX = x;
         this.coordY = y;
         this.finishX = finish;
@@ -49,7 +55,6 @@ public class Cockroach extends JPanel implements Runnable {
     private void saveWinner() {
         if (game.getFinished() == 1)
             game.setWinner(this);
-            //System.out.println("таракан " + getName() + " ПОБЕДИЛ - x = " + getCoordX() + " finish = " + getFinishX());
     }
 
     private void ifNewFinisher() {
@@ -76,12 +81,15 @@ public class Cockroach extends JPanel implements Runnable {
     }
 
     private int generateShift() {
-        // return (int) Math.sqrt(random.nextInt(100));
-        return random.nextInt(100);
+         return (int) Math.sqrt(random.nextInt(100));
+        //return random.nextInt(100);
     }
 
     public void step() {
         coordX += generateShift();
+    }
+    public void step(int c) {
+        coordX += c;
     }
 
     public int getCoordX() {
