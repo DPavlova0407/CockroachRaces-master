@@ -4,7 +4,6 @@ import core.Game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class View extends JFrame {
     private static final int WIDTH = 1000;

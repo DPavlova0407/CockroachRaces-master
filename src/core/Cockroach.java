@@ -32,6 +32,7 @@ public class Cockroach extends JPanel implements Runnable {
 
     @Override
     public void run() {
+        setFinished(false);
         while (coordX + getCockroachWidth() < finishX) {
             try {
                 makeStep();
@@ -124,7 +125,7 @@ public class Cockroach extends JPanel implements Runnable {
         // остановить поток и обнулить координаты
         setInStartPosition();
         game.repaint();
-        setFinished(false);
+        //setFinished(false);
         cockroachThread.stop();
     }
 
