@@ -67,12 +67,12 @@ public class Controller {
                         checkCockroach(e, i);
         }
 
-        private void checkCockroach(MouseEvent e, int i){
+        private void checkCockroach(MouseEvent e, int i) {
             calculateFlags(e, i);
             doStepIfTrue(i);
         }
 
-        private void calculateFlags(MouseEvent e, int i){
+        private void calculateFlags(MouseEvent e, int i) {
             int x = view.getGame().getCockroaches().get(i).getCoordX();
             int y = view.getGame().getCockroaches().get(i).getCoordY();
 
@@ -83,7 +83,7 @@ public class Controller {
                 flag1 = true;
         }
 
-        private void doStepIfTrue(int i){
+        private void doStepIfTrue(int i) {
             if (flag && flag1) {
                 view.getGame().getCockroaches().get(i).step(200);
                 view.getGame().repaint();

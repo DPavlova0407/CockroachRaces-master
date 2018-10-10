@@ -2,8 +2,6 @@ package core;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,13 +15,15 @@ public class Game extends JPanel implements Runnable {
     private Image finishImg;
 
     private List<Cockroach> cockroaches;
+    private List<Boolean> finished;
     private Cockroach winner;
     private int numberOfTracks;
     private int trackHeight;
-    private int finished = 0;
+    //private int finished = 0;
     private int raceCounter = 0;
 
     private boolean gameStarted = false;
+    private boolean haveWinner = false;
 
     public Game(int numberOfTracks, JTextField leader, JPanel textPanel) {
         initGame(numberOfTracks, leader, textPanel);
@@ -39,23 +39,28 @@ public class Game extends JPanel implements Runnable {
 
     @Override
     public void run() {
+        setGameStarted(true);
         for (int i = 0; i < cockroaches.size(); i++) {
-            setGameStarted(true);
             cockroaches.get(i).setCockroachThread();
             cockroaches.get(i).getCockroachThread().start();
         }
     }
 
-    public void addFinisher() {
-        finished += 1;
+    public void addFinisher(int i) {
+        finished.set(i, true);
     }
 
     public void delFinished() {
-        this.finished = 0;
+        for (int i = 0; i < finished.size(); i++)
+            finished.set(i, false);
     }
 
     public int getFinished() {
-        return finished;
+        int finishNumber = 0;
+        for (int i = 0; i < finished.size(); i++)
+            if (finished.get(i))
+                finishNumber++;
+        return finishNumber;
     }
 
     public int getNumberOfTracks() {
@@ -69,6 +74,7 @@ public class Game extends JPanel implements Runnable {
     public void setGameStarted(boolean gameStarted) {
         this.gameStarted = gameStarted;
         setTextFieldsEditable(!gameStarted);
+        setHaveWinner(false);
     }
 
     public void setTextFieldsEditable(boolean editable) {
@@ -102,7 +108,7 @@ public class Game extends JPanel implements Runnable {
     public void checkLeader() {
         if (getFinished() == numberOfTracks || !isGameStarted())
             this.raceLeader.setText("Все тараканы на старте");
-        else
+        else if (getFinished() == 0)
             this.raceLeader.setText("Лидирует " + findLeader().getName());
     }
 
@@ -119,6 +125,13 @@ public class Game extends JPanel implements Runnable {
         this.raceLeader = leader;
         this.textPanel = textPanel;
         finishImg = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/resources/finish.gif"));
+        initFinished();
+    }
+
+    private void initFinished() {
+        this.finished = new ArrayList<>();
+        for (int i = 0; i < numberOfTracks; i++)
+            finished.add(false);
     }
 
     public void calculateHeight() {
@@ -188,4 +201,11 @@ public class Game extends JPanel implements Runnable {
         return textPanel;
     }
 
+    public boolean isHaveWinner() {
+        return haveWinner;
+    }
+
+    public void setHaveWinner(boolean haveWinner) {
+        this.haveWinner = haveWinner;
+    }
 }

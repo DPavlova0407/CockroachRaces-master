@@ -1,11 +1,7 @@
 package core;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,20 +46,20 @@ public class Cockroach extends JPanel implements Runnable {
     private void makeStep() throws InterruptedException {
         game.repaint();
         step();
-        //print();//---
         Thread.sleep(1000);
     }
 
     private void saveWinner() {
-        if (game.getFinished() == 1)
+        if (!game.isHaveWinner()) {
             game.setWinner(this);
+            game.setHaveWinner(true);
+        }
     }
 
     private void ifNewFinisher() {
         if (coordX + getCockroachWidth() >= finishX) {
-            System.out.println("таракан " + getName() + " финишировал - x = " + coordX + " + " + getCockroachWidth() + " finish = " + getFinishX());//---
             finished = true;
-            game.addFinisher();
+            game.addFinisher(getNumber());
             saveWinner();
             ifAllFinished();
             stopCockroachThread();
@@ -73,25 +69,22 @@ public class Cockroach extends JPanel implements Runnable {
     private void ifAllFinished() {
         if (game.getFinished() == game.getNumberOfTracks()) {
             game.delFinished();
-            System.out.println("все тараканы финишировали");
             game.addRaceCounter();
-            System.out.println(game.getRaceCounter() + " забег, таракан " + game.getWinner().getName() + " ПОБЕДИЛ");
-            // восстановить изображение
-            game.repaint();
+            System.out.println(" забег № " + game.getRaceCounter() + " ПОБЕДИЛ " + game.getWinner().getName());
             game.setGameStarted(false);
         }
     }
 
     private int generateShift() {
-        return (int) Math.sqrt(random.nextInt(100));
-        //return random.nextInt(100);
+        return (int) Math.sqrt(random.nextInt(100)) + random.nextInt(70);
     }
 
     public void step() {
-        coordX += generateShift();
+        coordX = Math.min(coordX + generateShift(), finishX - getCockroachWidth());
     }
+
     public void step(int c) {
-        coordX += c;
+        coordX = Math.min(coordX + c, finishX - getCockroachWidth());
     }
 
     public int getCoordX() {
@@ -108,7 +101,6 @@ public class Cockroach extends JPanel implements Runnable {
 
     public Image readImage() {
         return Toolkit.getDefaultToolkit().createImage(getClass().getResource("/resources/cockroach.gif"));
-        //return Toolkit.getDefaultToolkit().createImage(getClass().getResource("/resources/cockroach4.jpg"));
     }
 
     public void paint(Graphics g) {
@@ -116,16 +108,8 @@ public class Cockroach extends JPanel implements Runnable {
         g.drawImage(cockroachImg, getCoordX(), getCoordY(), null);
     }
 
-    private void print() {
-        System.out.println("( " + name + " " + coordX + " )");
-    }
-
     public Thread getCockroachThread() {
         return cockroachThread;
-    }
-
-    public int getFinishX() {
-        return finishX;
     }
 
     public void setInStartPosition() {
@@ -139,6 +123,8 @@ public class Cockroach extends JPanel implements Runnable {
     public void stopCockroachThread() {
         // остановить поток и обнулить координаты
         setInStartPosition();
+        game.repaint();
+        setFinished(false);
         cockroachThread.stop();
     }
 
@@ -156,5 +142,13 @@ public class Cockroach extends JPanel implements Runnable {
 
     public static int getCockroachHeight() {
         return height;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
+
+    public int getNumber() {
+        return number;
     }
 }

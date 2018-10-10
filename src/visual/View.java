@@ -37,13 +37,13 @@ public class View extends JFrame {
     }
 
     public void createContent() {
-        setTitle("Races");
+        setTitle("Cockroach races");
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         raceLeader = new JTextField("Все тараканы на старте");
         raceLeader.setEditable(false);
 
-        button = new JButton("Start");
+        button = new JButton("Начать забег");
     }
 
     public void createGame() {
@@ -56,7 +56,7 @@ public class View extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         for (int i = 1; i < numberOfTracks + 1; i++) {
             textField = new JTextField();
-            textField.setText("Set name " + i);
+            textField.setText("Таракан " + i);
             textField.setPreferredSize(new Dimension(100, 50));
             panel.add(textField);
         }
