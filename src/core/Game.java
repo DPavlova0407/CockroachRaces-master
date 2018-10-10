@@ -41,14 +41,9 @@ public class Game extends JPanel implements Runnable {
     public void run() {
         for (int i = 0; i < cockroaches.size(); i++) {
             setGameStarted(true);
-            // запретить редактирование полей
             cockroaches.get(i).setCockroachThread();
             cockroaches.get(i).getCockroachThread().start();
         }
-    }
-
-    public int getTrackHeight() {
-        return trackHeight;
     }
 
     public void addFinisher() {
@@ -76,8 +71,8 @@ public class Game extends JPanel implements Runnable {
         setTextFieldsEditable(!gameStarted);
     }
 
-    public void setTextFieldsEditable(boolean editable){
-        for (int i = 0; i < getNumberOfTracks(); i++){
+    public void setTextFieldsEditable(boolean editable) {
+        for (int i = 0; i < getNumberOfTracks(); i++) {
             JTextField field1 = (JTextField) getTextPanel().getComponent(i);
             field1.setEditable(editable);
             // при начале забега обновим имена тараканов из текстовых полей
@@ -92,24 +87,31 @@ public class Game extends JPanel implements Runnable {
 
     public void createCockroaches() {
         cockroaches = new ArrayList<>();
-        for (int i = 0; i < numberOfTracks; i++) {
-            //JTextField field1 = (JTextField) getTextPanel().getComponent(i);
-            Cockroach c = new Cockroach(((JTextField) getTextPanel().getComponent(i)).getText(), i, 0, i * trackHeight + trackHeight/2 - 25, finishX, this);
-            cockroaches.add(c);
-        }
+        for (int i = 0; i < numberOfTracks; i++)
+            cockroaches.add(new Cockroach(getNameFromText(i), i, 0, calculateCenterY(i), finishX, this));
+    }
+
+    public int calculateCenterY(int i) {
+        return (i * trackHeight + trackHeight / 2 - Cockroach.getCockroachHeight() / 2);
+    }
+
+    public String getNameFromText(int i) {
+        return ((JTextField) getTextPanel().getComponent(i)).getText();
     }
 
     public void checkLeader() {
         if (getFinished() == numberOfTracks || !isGameStarted())
             this.raceLeader.setText("Все тараканы на старте");
-        else {
-            Cockroach leader = cockroaches.get(0);
-            for (Cockroach c : cockroaches) {
-                if (!c.isFinished() && c.getCoordX() > leader.getCoordX())
-                    leader = c;
-            }
-            this.raceLeader.setText("Лидирует " + leader.getName());
-        }
+        else
+            this.raceLeader.setText("Лидирует " + findLeader().getName());
+    }
+
+    public Cockroach findLeader() {
+        Cockroach leader = cockroaches.get(0);
+        for (Cockroach c : cockroaches)
+            if (!c.isFinished() && c.getCoordX() > leader.getCoordX())
+                leader = c;
+        return leader;
     }
 
     public void initGame(int numberOfTracks, JTextField leader, JPanel textPanel) {
@@ -159,7 +161,7 @@ public class Game extends JPanel implements Runnable {
     public void drawFinish(Graphics graphics, int i) {
         graphics.setColor(Color.WHITE);
         graphics.fillRect(WIDTH + 1, i * trackHeight, 100, trackHeight);
-        graphics.drawImage(finishImg, WIDTH + 1, i * trackHeight + trackHeight/2 - 25, this);
+        graphics.drawImage(finishImg, WIDTH + 1, i * trackHeight + trackHeight / 2 - 25, this);
     }
 
     public void setWinner(Cockroach winner) {
@@ -186,9 +188,4 @@ public class Game extends JPanel implements Runnable {
         return textPanel;
     }
 
-    /*public void checkNames(){
-        for (core.Cockroach c : cockroaches) {
-
-        }
-    }*/
 }

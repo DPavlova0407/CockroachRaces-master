@@ -61,25 +61,35 @@ public class Controller {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            if (view.getGame().isGameStarted()) {
-                for (int i = 0; i < view.getGame().getNumberOfTracks(); i++) {
-                    int x = view.getGame().getCockroaches().get(i).getCoordX();
-                    int y = view.getGame().getCockroaches().get(i).getCoordY();
+            if (view.getGame().isGameStarted())
+                for (int i = 0; i < view.getGame().getNumberOfTracks(); i++)
+                    if (!view.getGame().getCockroaches().get(i).isFinished())
+                        checkCockroach(e, i);
+        }
 
-                    if ((e.getX() >= x && e.getX() <= x + widthCockroach))
-                        flag = true;
+        private void checkCockroach(MouseEvent e, int i){
+            calculateFlags(e, i);
+            doStepIfTrue(i);
+        }
 
-                    if ((e.getY() >= y && e.getY() <= y + heightCockroach))
-                        flag1 = true;
+        private void calculateFlags(MouseEvent e, int i){
+            int x = view.getGame().getCockroaches().get(i).getCoordX();
+            int y = view.getGame().getCockroaches().get(i).getCoordY();
 
-                    if (flag && flag1) {
-                        view.getGame().getCockroaches().get(i).step(200);
-                        view.getGame().repaint();
+            if ((e.getX() >= x && e.getX() <= x + widthCockroach))
+                flag = true;
 
-                        flag = false;
-                        flag1 = false;
-                    }
-                }
+            if ((e.getY() >= y && e.getY() <= y + heightCockroach))
+                flag1 = true;
+        }
+
+        private void doStepIfTrue(int i){
+            if (flag && flag1) {
+                view.getGame().getCockroaches().get(i).step(200);
+                view.getGame().repaint();
+
+                flag = false;
+                flag1 = false;
             }
         }
 

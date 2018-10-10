@@ -83,7 +83,7 @@ public class Cockroach extends JPanel implements Runnable {
     }
 
     private int generateShift() {
-         return (int) Math.sqrt(random.nextInt(100));
+        return (int) Math.sqrt(random.nextInt(100));
         //return random.nextInt(100);
     }
 
