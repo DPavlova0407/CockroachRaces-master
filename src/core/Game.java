@@ -94,7 +94,7 @@ public class Game extends JPanel implements Runnable {
         cockroaches = new ArrayList<>();
         for (int i = 0; i < numberOfTracks; i++) {
             //JTextField field1 = (JTextField) getTextPanel().getComponent(i);
-            Cockroach c = new Cockroach(((JTextField) getTextPanel().getComponent(i)).getText(), i, 0, i * trackHeight + trackHeight / 3, finishX, this);
+            Cockroach c = new Cockroach(((JTextField) getTextPanel().getComponent(i)).getText(), i, 0, i * trackHeight + trackHeight/2 - 25, finishX, this);
             cockroaches.add(c);
         }
     }
@@ -116,7 +116,7 @@ public class Game extends JPanel implements Runnable {
         this.numberOfTracks = numberOfTracks;
         this.raceLeader = leader;
         this.textPanel = textPanel;
-        finishImg = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/resources/finish.jpg"));
+        finishImg = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/resources/finish.gif"));
     }
 
     public void calculateHeight() {
@@ -147,9 +147,9 @@ public class Game extends JPanel implements Runnable {
 
     public void drawLine(Graphics graphics, int i) {
         if (i % 2 == 0)
-            graphics.setColor(Color.pink);
+            graphics.setColor(Color.lightGray);
         else
-            graphics.setColor(Color.orange);
+            graphics.setColor(Color.white);
         graphics.fillRect(0, i * trackHeight, WIDTH, trackHeight);
         graphics.setColor(Color.BLACK);
         graphics.drawRect(0, i * trackHeight, WIDTH, trackHeight);
@@ -159,7 +159,7 @@ public class Game extends JPanel implements Runnable {
     public void drawFinish(Graphics graphics, int i) {
         graphics.setColor(Color.WHITE);
         graphics.fillRect(WIDTH + 1, i * trackHeight, 100, trackHeight);
-        graphics.drawImage(finishImg, WIDTH + 1, i * trackHeight, this);
+        graphics.drawImage(finishImg, WIDTH + 1, i * trackHeight + trackHeight/2 - 25, this);
     }
 
     public void setWinner(Cockroach winner) {

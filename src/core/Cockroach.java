@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Cockroach extends JPanel implements Runnable {
+    private static int width = 70, height = 50;
+
     private Thread cockroachThread;
     private String name;
     private int number;
@@ -34,7 +36,7 @@ public class Cockroach extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        while (coordX < finishX) {
+        while (coordX + getCockroachWidth() < finishX) {
             try {
                 makeStep();
             } catch (InterruptedException e) {
@@ -58,8 +60,8 @@ public class Cockroach extends JPanel implements Runnable {
     }
 
     private void ifNewFinisher() {
-        if (coordX >= finishX) {
-            System.out.println("таракан " + getName() + " финишировал - x = " + getCoordX() + " finish = " + getFinishX());//---
+        if (coordX + getCockroachWidth() >= finishX) {
+            System.out.println("таракан " + getName() + " финишировал - x = " + coordX + " + " + getCockroachWidth() + " finish = " + getFinishX());//---
             finished = true;
             game.addFinisher();
             saveWinner();
@@ -105,7 +107,8 @@ public class Cockroach extends JPanel implements Runnable {
     }
 
     public Image readImage() {
-        return Toolkit.getDefaultToolkit().createImage(getClass().getResource("/resources/cockroach.jpg"));
+        return Toolkit.getDefaultToolkit().createImage(getClass().getResource("/resources/cockroach.gif"));
+        //return Toolkit.getDefaultToolkit().createImage(getClass().getResource("/resources/cockroach4.jpg"));
     }
 
     public void paint(Graphics g) {
@@ -145,5 +148,13 @@ public class Cockroach extends JPanel implements Runnable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public static int getCockroachWidth() {
+        return width;
+    }
+
+    public static int getCockroachHeight() {
+        return height;
     }
 }

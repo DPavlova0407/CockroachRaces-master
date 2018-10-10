@@ -13,6 +13,9 @@ public class Controller {
     private boolean flag = false;
     private boolean flag1 = false;
 
+    private static int widthCockroach = Cockroach.getCockroachWidth();
+    private static int heightCockroach = Cockroach.getCockroachHeight();
+
     public Controller(View viewN) {
         this.view = viewN;
         this.view.getButton().addActionListener(new Button());
@@ -63,10 +66,10 @@ public class Controller {
                     int x = view.getGame().getCockroaches().get(i).getCoordX();
                     int y = view.getGame().getCockroaches().get(i).getCoordY();
 
-                    if ((e.getX() >= x - 40 && e.getX() <= x + 40))
+                    if ((e.getX() >= x && e.getX() <= x + widthCockroach))
                         flag = true;
 
-                    if ((e.getY() >= y - 40 && e.getY() <= y + 40))
+                    if ((e.getY() >= y && e.getY() <= y + heightCockroach))
                         flag1 = true;
 
                     if (flag && flag1) {
